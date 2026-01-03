@@ -1,0 +1,397 @@
+/* --- GLOBAL RESET & FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+:root {
+  /* LAB MODE (Professional, Clean, Tech) */
+  --bg-app: #f8f9fa;
+  --bg-panel: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --accent-primary: #2563eb; /* Royal Blue */
+  --accent-glow: rgba(37, 99, 235, 0.2);
+  --border-color: #e5e7eb;
+  --danger-color: #ef4444;
+  --success-color: #10b981;
+  --font-ui: 'Space Grotesk', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  --grid-pattern: radial-gradient(#e5e7eb 1px, transparent 1px);
+}
+
+.dark-mode {
+  /* HACKER MODE (Cyberpunk, High Contrast) */
+  --bg-app: #030712; /* Deepest Navy/Black */
+  --bg-panel: #111827;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --accent-primary: #00e5ff; /* Cyan Neon */
+  --accent-glow: rgba(0, 229, 255, 0.15);
+  --border-color: #1f2937;
+  --danger-color: #ff0055;
+  --success-color: #00ff9d;
+  --shadow-card: 0 0 40px -10px rgba(0, 229, 255, 0.1);
+  --grid-pattern: radial-gradient(#1f2937 1px, transparent 1px);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  background-image: var(--grid-pattern);
+  background-size: 20px 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- MAIN CONTAINER --- */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 1400px; /* Wider for desktop */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* --- HEADER (THE BRANDING) --- */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 1.5rem;
+}
+
+.brand-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-code);
+  font-weight: 800;
+  font-size: 2.2rem;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* --- BADGES & BUTTONS --- */
+.status-badge {
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  white-space: nowrap; /* Prevent text wrap */
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--success-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--success-color);
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+/* --- MAIN PANEL (THE GLASS BOX) --- */
+.glass-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box; /* Critical for responsiveness */
+  transition: all 0.3s ease;
+}
+
+/* --- INPUT AREA --- */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+textarea {
+  width: 100%;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  font-family: var(--font-code);
+  font-size: 0.95rem;
+  min-height: 200px;
+  resize: vertical;
+  transition: all 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.analyze-btn {
+  width: 100%;
+  background: var(--text-primary);
+  color: var(--bg-app);
+  border: none;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  font-family: var(--font-ui);
+}
+
+.analyze-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2);
+}
+
+.analyze-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- RESULTS CARD --- */
+.report-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Sidebar fixed, Content fluid */
+  gap: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+  animation: slideUp 0.4s ease-out;
+}
+
+.report-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.metric-box {
+  background: var(--bg-app);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.3s ease;
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-code);
+  word-break: break-word; /* Prevent long text overflow */
+}
+
+.metric-value.critical { color: var(--danger-color); }
+.metric-value.medium { color: #f59e0b; }
+.metric-value.low { color: var(--success-color); }
+
+.report-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0; /* Prevents flex child from overflowing */
+}
+
+.content-block h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-block h3::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: var(--accent-primary);
+  display: block;
+}
+
+.diagnosis-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.code-display {
+  background: #0d1117;
+  color: #c9d1d9;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #30363d;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  overflow-x: auto; /* Allow code scrolling */
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+/* Tablet & Smaller Laptops (Max Width: 1024px) */
+@media (max-width: 1024px) {
+  .app-container {
+    padding: 1.5rem;
+  }
+  
+  .glass-panel {
+    padding: 2rem;
+  }
+  
+  .report-grid {
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Tablets & Large Phones (Max Width: 768px) */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .report-grid {
+    grid-template-columns: 1fr; /* Stack sidebar on top */
+  }
+  
+  .report-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns for metrics */
+    gap: 1rem;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Mobile Phones (Max Width: 480px) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 1rem;
+  }
+
+  .glass-panel {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+  }
+
+  textarea {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .report-sidebar {
+    grid-template-columns: 1fr; /* 1 column metrics for small screens */
+  }
+
+  .metric-value {
+    font-size: 1.2rem;
+  }
+
+  .analyze-btn {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .code-display {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+}
