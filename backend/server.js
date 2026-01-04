@@ -448,7 +448,7 @@ const clientBuildPath = path.join(__dirname, '../frontend/dist');
 app.use('/dashboard', express.static(clientBuildPath));
 
 // 2. Serve index.html for React Router
-app.get('/dashboard/*', (req, res) => {
+app.get(/^\/dashboard\/.*$/, (req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
@@ -465,7 +465,7 @@ app.get('/', (req, res) => {
 // ==========================================
 // 4. FALLBACK & START
 // ==========================================
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.redirect('/');
 });
 
