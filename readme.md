@@ -245,7 +245,7 @@ cd client && npm run dev
 ## 🧪 CLI Mode
 
 ```
-node cli/aegis.js "FATAL ERROR: Heap out of memory"
+node cli/urfis.js "FATAL ERROR: Heap out of memory"
 ```
 
 ---
