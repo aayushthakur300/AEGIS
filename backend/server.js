@@ -1,12 +1,14 @@
 
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // require('dotenv').config(); 
 // const express = require("express");
 // const cors = require("cors");
 // const http = require("http");
 // const { Server } = require("socket.io");
 
-// // ✅ IMPORT INTELLIGENT AI WRAPPER
-// const { analyzeErrorWithGemini } = require("./routes/analyze");
+// // ✅ IMPORT SUPREME ENGINES
+// const { analyzeErrorWithGemini } = require("./routes/analyze"); // The Architect (AI)
+// const { detectThreatsAndSilentKillers } = require("./utils/mlDetector"); // The Sentry (700+ Signatures)
 
 // const { 
 //   sanitizeLog, checkCache, saveToCache, 
@@ -105,69 +107,6 @@
 // processBackgroundJobs();
 
 // // ==========================================
-// // 🕵️ INTELLIGENT PATTERN SCANNER (40+ Silent Killers)
-// // ==========================================
-// const detectSilentKillerType = (logText) => {
-//     const lower = logText.toLowerCase();
-
-//     // --- 0. SOURCE CODE & LOGIC ERRORS (C++, Go, etc.) ---
-//     // Note: Simple syntax errors are NOT silent killers. 
-//     // We only flag logic that causes hangs, crashes, or corruption.
-//     if (lower.includes("/ 0") || (lower.includes("/ b") && lower.includes("b = 0"))) return "DIVISION BY ZERO";
-//     if (lower.includes("thread") && lower.includes("counter++") && !lower.includes("atomic") && !lower.includes("mutex")) return "RACE CONDITION (DATA RACE)";
-//     if (lower.includes("sizeof") && lower.includes("malloc") && !lower.includes("*")) return "INCORRECT MEMORY ALLOCATION";
-    
-//     // --- 1. MEMORY & RESOURCE LEAKS ---
-//     if (lower.includes("maxlistenersexceeded") || lower.includes("eventemitter memory leak")) return "EVENT EMITTER LEAK";
-//     if (lower.includes("heap out of memory") || lower.includes("ineffective mark-compacts")) return "HEAP OVERFLOW CRASH";
-//     if (lower.includes("gc overhead limit exceeded")) return "GC OVERHEAD LIMIT EXCEEDED";
-//     if (lower.includes("outofmemoryerror: metaspace")) return "JAVA METASPACE LEAK";
-//     if (lower.includes("emfile") || lower.includes("too many open files")) return "FILE DESCRIPTOR EXHAUSTION";
-//     if (lower.includes("socket hang up") || lower.includes("econnreset")) return "TCP CONNECTION RESET";
-
-//     // --- 2. CONCURRENCY & THREADING ---
-//     if (lower.includes("deadlock") || lower.includes("lock wait timeout")) return "DATABASE DEADLOCK";
-//     if (lower.includes("zombie") || lower.includes("defunct")) return "ZOMBIE PROCESS";
-//     if (lower.includes("blocked by global interpreter lock")) return "GIL CONTENTION";
-//     if (lower.includes("thread starvation")) return "THREAD STARVATION";
-//     if (lower.includes("race condition")) return "RACE CONDITION DETECTED";
-//     if (lower.includes("concurrentmodificationexception")) return "CONCURRENT MODIFICATION";
-
-//     // --- 3. INFRASTRUCTURE & LIMITS ---
-//     if (lower.includes("connection pool exhausted") || lower.includes("pool size exceeded")) return "CONNECTION POOL EXHAUSTION";
-//     if (lower.includes("timeout waiting for idle object")) return "CONNECTION POOL TIMEOUT";
-//     if (lower.includes("no space left on device")) return "DISK SPACE EXHAUSTED";
-//     if (lower.includes("fork: retry: resource temporarily unavailable")) return "PID/THREAD EXHAUSTION";
-//     if (lower.includes("ephemeral port exhaustion")) return "EPHEMERAL PORT EXHAUSTION";
-//     if (lower.includes("clock skew detected")) return "SYSTEM CLOCK SKEW";
-
-//     // --- 4. PERFORMANCE & LATENCY ---
-//     if (lower.includes("process.nexttick starvation")) return "EVENT LOOP STARVATION";
-//     if (lower.includes("slow query detected")) return "SLOW QUERY PERFORMANCE";
-//     if (lower.includes("catastrophic backtracking") || lower.includes("redos")) return "REGEX DENIAL OF SERVICE (ReDoS)";
-//     if (lower.includes("n+1 query problem")) return "N+1 QUERY ANTI-PATTERN";
-//     if (lower.includes("request entity too large")) return "PAYLOAD SIZE EXCEEDED";
-
-//     // --- 5. LOGIC & DATA INTEGRITY ---
-//     if (lower.includes("unhandledpromiserejection")) return "UNHANDLED PROMISE REJECTION";
-//     if (lower.includes("converting circular structure to json")) return "JSON CIRCULAR REFERENCE";
-//     if (lower.includes("floating point precision error")) return "FLOATING POINT DRIFT";
-//     if (lower.includes("integer overflow")) return "INTEGER OVERFLOW";
-//     if (lower.includes("deprecationwarning")) return "DEPRECATION TIME BOMB";
-//     if (lower.includes("transaction rolled back")) return "SILENT TRANSACTION ROLLBACK";
-
-//     // --- 6. SECURITY TIME BOMBS ---
-//     if (lower.includes("cross-origin request blocked")) return "CORS POLICY VIOLATION";
-//     if (lower.includes("mixed content")) return "MIXED CONTENT SECURITY";
-//     if (lower.includes("certificate has expired")) return "SSL CERTIFICATE EXPIRED";
-//     if (lower.includes("rate limit exceeded")) return "API RATE LIMIT EXCEEDED";
-//     if (lower.includes("zip bomb detected")) return "COMPRESSION BOMB DETECTED";
-//     if (lower.includes("invalid csrf token")) return "CSRF TOKEN MISMATCH";
-
-//     return null;
-// };
-
-// // ==========================================
 // // 📡 API ROUTES
 // // ==========================================
 
@@ -188,13 +127,15 @@
 // });
 
 // app.post("/api/analyze", async (req, res) => {
-//   const { errorLog, privacyMode } = req.body;
+//   const { errorLog, language, privacyMode } = req.body;
   
-//   // 1. Detect known patterns (Source Code Logic OR Log Signature)
-//   const killerType = detectSilentKillerType(errorLog);
-//   const isSilentKiller = killerType !== null;
+//   // 1. RUN THE 700+ SIGNATURE SCAN (Instant Sentry)
+//   const mlAnalysis = detectThreatsAndSilentKillers(errorLog);
+//   const isSilentKiller = mlAnalysis.isSilentKiller;
+//   const killerType = mlAnalysis.silentKillers.length > 0 ? mlAnalysis.silentKillers[0] : null;
   
 //   if (isSilentKiller) log("ALERT", `💀 SILENT KILLER DETECTED: ${killerType}`);
+//   if (mlAnalysis.isThreat) log("ALERT", `⚠️ SECURITY THREAT DETECTED: ${mlAnalysis.threats[0]}`);
 
 //   try {
 //     const finalLog = privacyMode ? sanitizeLog(errorLog) : errorLog;
@@ -216,34 +157,44 @@
 //         return res.json(cacheResult);
 //     }
 
-//     // 3. CALL INTELLIGENT AI WRAPPER (From routes/analyze.js)
+//     // 3. CALL INTELLIGENT AI WRAPPER (The Architect)
+//     // We pass the ML findings as context so the AI knows what to look for.
 //     const context = {
-//         isSourceCode,
-//         isSilentKiller,
-//         killerType
+//         detectedThreats: mlAnalysis.threats,
+//         detectedSilentKillers: mlAnalysis.silentKillers,
+//         entropyScore: mlAnalysis.entropyScore
 //     };
 
 //     // This handles the matrix logic, round-robin, and prompt generation internally
-//     let result = await analyzeErrorWithGemini(finalLog, "auto-detect", context);
+//     let result = await analyzeErrorWithGemini(finalLog, language || "auto-detect", context);
 
-//     // 4. Merge Heuristics: ONLY flag if Silent Killer was actually detected
+//     // 4. MERGE RESULTS (Heuristics + AI)
+//     // If ML found a Silent Killer, force the flag to TRUE even if AI missed it (Safety Net).
 //     if (isSilentKiller) {
 //         result.isSilentKiller = true;
 //         result.silentKillerType = killerType;
 //         result.severity = "CRITICAL";
 //         result.severityScore = 10;
-//         // Prefix root cause if not already emphatic
+        
+//         // Ensure root cause mentions the specific detected pattern
 //         if (!result.rootCause || !String(result.rootCause).toUpperCase().includes("CRITICAL")) {
 //              result.rootCause = `CRITICAL: ${killerType}`;
 //         }
+        
 //         // Ensure explanation mentions the heuristic detection
 //         if (!result.explanation || String(result.explanation).includes("Unknown")) {
-//              result.explanation = `Heuristic Scan detected a '${killerType}' pattern. This is a known high-risk failure mode.`;
+//              result.explanation = `Heuristic Scan detected a '${killerType}' pattern. This is a known high-risk failure mode matched against our knowledge base.`;
 //         }
-//     } else {
-//         // Explicitly set false so frontend doesn't show Red Box
+//     } 
+//     // If ML found a Security Threat (SQLi, etc.)
+//     else if (mlAnalysis.isThreat) {
+//         result.severity = "CRITICAL";
+//         result.severityScore = 10;
+//         result.rootCause = `SECURITY THREAT: ${mlAnalysis.threats[0]}`;
+//     }
+//     else {
+//         // Explicitly set false so frontend doesn't show Red Box unnecessarily
 //         result.isSilentKiller = false;
-//         // AI still determines severity/score, but the "Killer" flag is off
 //     }
 
 //     // 5. Save & Respond
@@ -277,14 +228,15 @@
 // const PORT = process.env.PORT || 5000;
 // app.listen(PORT, () => {
 //   console.log(`[Server] Server is running on http://localhost:${PORT}`);
-//   console.log(`[Server] Ready to detect 20+ languages and 100+ failure types.`);
+//   console.log(`[Server] AEGIS ACTIVE: 700+ Signatures Loaded. AI Architect Online.`);
 // });
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------
 require('dotenv').config(); 
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const path = require('path');
 
 // ✅ IMPORT SUPREME ENGINES
 const { analyzeErrorWithGemini } = require("./routes/analyze"); // The Architect (AI)
@@ -331,9 +283,8 @@ function log(type, msg) {
 }
 
 function printTerminalReport(result) {
-    console.log(`\n${TERM.cyan}═══════════════════════ URFIS ANALYSIS REPORT ═══════════════════════${TERM.reset}`);
+    console.log(`\n${TERM.cyan}═══════════════════════ AEGIS ANALYSIS REPORT ═══════════════════════${TERM.reset}`);
     
-    // Handle potential undefined values safely
     const sev = result.severity || "UNKNOWN";
     const score = result.severityScore || 0;
     const cause = result.rootCause || "Unknown Cause";
@@ -349,12 +300,9 @@ function printTerminalReport(result) {
         const color = isHigh ? TERM.yellow : TERM.green;
         console.log(`${color}${statusIcon} THREAT STATUS:   ${statusText}${TERM.reset}`);
     }
-
-    const severityColor = (String(sev).toUpperCase() === 'HIGH' || String(sev).toUpperCase() === 'CRITICAL') ? TERM.red : (String(sev).toUpperCase() === 'MED' ? TERM.yellow : TERM.green);
     
-    console.log(`${TERM.bold}📊 SEVERITY:${TERM.reset}      ${severityColor}${sev} (Score: ${score}/10)${TERM.reset}`);
+    console.log(`${TERM.bold}📊 SEVERITY:${TERM.reset}      ${sev} (Score: ${score}/10)`);
     console.log(`${TERM.bold}🔍 ROOT CAUSE:${TERM.reset}    ${cause}`);
-    console.log(`${TERM.bold}📝 EXPLANATION:${TERM.reset}   ${expl}`);
     console.log(`${TERM.bold}🛠️  SUGGESTED FIX:${TERM.reset}`);
     console.log(`${TERM.yellow}${fix}${TERM.reset}`);
     console.log(`${TERM.cyan}═════════════════════════════════════════════════════════════════════\n${TERM.reset}`);
@@ -364,7 +312,7 @@ function printTerminalReport(result) {
 // 🏗️ ARCHITECTURE: SOCKET & WORKERS
 // ==========================================
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] } });
+const io = new Server(server, { cors: { origin: "*", methods: ["GET", "POST"] } });
 
 const jobQueue = [];
 const processBackgroundJobs = async () => {
@@ -372,44 +320,41 @@ const processBackgroundJobs = async () => {
         const job = jobQueue.shift();
         log("WORKER", `⚙️  Processing Job: ${job.id} (${job.type})`);
         
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 2000)); // Simulate processing
         
-        const fileContent = `URFIS REPORT\nID: ${job.id}\nResult: ${JSON.stringify(job.data, null, 2)}`;
+        const fileContent = `AEGIS REPORT\nID: ${job.id}\nResult: ${JSON.stringify(job.data, null, 2)}`;
         completedJobs.set(job.id, Buffer.from(fileContent));
         
-        const downloadUrl = `http://localhost:5000/api/download/${job.id}`;
+        const downloadUrl = `http://localhost:${process.env.PORT || 5000}/api/download/${job.id}`;
         
         io.emit("job_complete", { jobId: job.id, status: "COMPLETED", resultUrl: downloadUrl });
-        log("SUCCESS", `✅ Job ${job.id} Completed. Ready for download.`);
+        log("SUCCESS", `✅ Job ${job.id} Completed.`);
     }
     setTimeout(processBackgroundJobs, 1000); 
 };
 processBackgroundJobs();
 
 // ==========================================
-// 📡 API ROUTES
+// 1. API ROUTES (Data Layer) - PRIORITY #1
 // ==========================================
 
-// ✅ ROOT ROUTE (Fixes "Cannot GET /" error)
-app.get("/", (req, res) => {
-    res.send(`
-        <h1 style="color:green; font-family:monospace;">🟢 URFIS SERVER CONNECTED & ONLINE</h1>
-        <p style="font-family:monospace;">System is ready to analyze logs and source code.</p>
-    `);
-});
-
+// ✅ DOWNLOAD ROUTE
 app.get("/api/download/:id", (req, res) => {
     if (completedJobs.has(parseInt(req.params.id)) || completedJobs.has(req.params.id)) {
-        res.setHeader('Content-Type', 'application/pdf'); 
-        res.setHeader('Content-Disposition', `attachment; filename=urfis_report_${req.params.id}.txt`);
+        res.setHeader('Content-Type', 'text/plain'); 
+        res.setHeader('Content-Disposition', `attachment; filename=aegis_report_${req.params.id}.txt`);
         res.send(completedJobs.get(parseInt(req.params.id)) || completedJobs.get(req.params.id));
     } else res.status(404).send("File not found");
 });
 
+// ✅ SEARCH ROUTE (Restored from your original code)
+app.post("/api/search", async (req, res) => res.json({keywords:[]}));
+
+// ✅ MAIN ANALYSIS ROUTE
 app.post("/api/analyze", async (req, res) => {
   const { errorLog, language, privacyMode } = req.body;
   
-  // 1. RUN THE 700+ SIGNATURE SCAN (Instant Sentry)
+  // 1. RUN THE 700+ SIGNATURE SCAN
   const mlAnalysis = detectThreatsAndSilentKillers(errorLog);
   const isSilentKiller = mlAnalysis.isSilentKiller;
   const killerType = mlAnalysis.silentKillers.length > 0 ? mlAnalysis.silentKillers[0] : null;
@@ -419,8 +364,6 @@ app.post("/api/analyze", async (req, res) => {
 
   try {
     const finalLog = privacyMode ? sanitizeLog(errorLog) : errorLog;
-    
-    // 2. Check Cache (Skip for source code to force fresh analysis)
     const isSourceCode = finalLog.includes("int ") || finalLog.includes("function") || finalLog.includes("def ");
     const cacheResult = checkCache(finalLog);
     
@@ -437,47 +380,30 @@ app.post("/api/analyze", async (req, res) => {
         return res.json(cacheResult);
     }
 
-    // 3. CALL INTELLIGENT AI WRAPPER (The Architect)
-    // We pass the ML findings as context so the AI knows what to look for.
     const context = {
         detectedThreats: mlAnalysis.threats,
         detectedSilentKillers: mlAnalysis.silentKillers,
         entropyScore: mlAnalysis.entropyScore
     };
 
-    // This handles the matrix logic, round-robin, and prompt generation internally
     let result = await analyzeErrorWithGemini(finalLog, language || "auto-detect", context);
 
-    // 4. MERGE RESULTS (Heuristics + AI)
-    // If ML found a Silent Killer, force the flag to TRUE even if AI missed it (Safety Net).
     if (isSilentKiller) {
         result.isSilentKiller = true;
         result.silentKillerType = killerType;
         result.severity = "CRITICAL";
         result.severityScore = 10;
-        
-        // Ensure root cause mentions the specific detected pattern
         if (!result.rootCause || !String(result.rootCause).toUpperCase().includes("CRITICAL")) {
              result.rootCause = `CRITICAL: ${killerType}`;
         }
-        
-        // Ensure explanation mentions the heuristic detection
-        if (!result.explanation || String(result.explanation).includes("Unknown")) {
-             result.explanation = `Heuristic Scan detected a '${killerType}' pattern. This is a known high-risk failure mode matched against our knowledge base.`;
-        }
-    } 
-    // If ML found a Security Threat (SQLi, etc.)
-    else if (mlAnalysis.isThreat) {
+    } else if (mlAnalysis.isThreat) {
         result.severity = "CRITICAL";
         result.severityScore = 10;
         result.rootCause = `SECURITY THREAT: ${mlAnalysis.threats[0]}`;
-    }
-    else {
-        // Explicitly set false so frontend doesn't show Red Box unnecessarily
+    } else {
         result.isSilentKiller = false;
     }
 
-    // 5. Save & Respond
     result.jiraPayload = generateJiraPayload(result);
     saveToCache(cacheResult.hash, result);
 
@@ -491,22 +417,62 @@ app.post("/api/analyze", async (req, res) => {
   }
 });
 
+// ✅ PDF QUEUE
 app.post("/api/export-pdf-async", (req, res) => {
     const jobId = Date.now();
     jobQueue.push({ id: jobId, type: "PDF", data: req.body.analysisData });
     res.json({ message: "Queued", jobId });
 });
 
-app.post("/api/search", async (req, res) => res.json({keywords:[]}));
-
+// ✅ CHAT BOT API
 app.post("/api/chat", async (req, res) => {
-    const result = await analyzeErrorWithGemini(`Context: ${req.body.context}. User Question: ${req.body.message}`, "Chat Mode", {});
-    const replyText = result.explanation || JSON.stringify(result);
-    res.json({ reply: replyText });
+    try {
+        const { message, context } = req.body;
+        const chatPrompt = `CONTEXT: ${context}\nUSER QUESTION: "${message}"\nProvide a technical answer as a Senior Engineer.`;
+        const result = await analyzeErrorWithGemini(chatPrompt, "Chat Mode", {});
+        const replyText = result.explanation || result.fix || "I analyzed your request.";
+        res.json({ reply: replyText });
+    } catch (e) {
+        console.error("Chat Error:", e);
+        res.status(500).json({ reply: "System Error: Unable to process chat." });
+    }
+});
+
+// ==========================================
+// 2. SERVE REACT DASHBOARD - PRIORITY #2
+// ==========================================
+// 👇 IMPORTANT: Correct path to FRONTEND folder
+const clientBuildPath = path.join(__dirname, '../frontend/dist'); 
+
+// 1. Serve Static Assets (JS/CSS) at /dashboard URL
+app.use('/dashboard', express.static(clientBuildPath));
+
+// 2. Serve index.html for React Router
+app.get('/dashboard/*', (req, res) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+
+// ==========================================
+// 3. SERVE LANDING PAGE - PRIORITY #3
+// ==========================================
+// Serve public assets (your client.html) at the Root URL
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'client.html'));
+});
+
+// ==========================================
+// 4. FALLBACK & START
+// ==========================================
+app.get('*', (req, res) => {
+    res.redirect('/');
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`[Server] Server is running on http://localhost:${PORT}`);
-  console.log(`[Server] AEGIS ACTIVE: 700+ Signatures Loaded. AI Architect Online.`);
+server.listen(PORT, () => {
+  console.log(`[Server] AEGIS ACTIVE on http://localhost:${PORT}`);
+  console.log(`   👉 Landing:   http://localhost:${PORT}/`);
+  console.log(`   👉 Dashboard: http://localhost:${PORT}/dashboard`);
+  console.log(`[Server] 700+ Signatures Loaded. AI Architect Online.`);
 });
